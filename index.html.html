@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3 Meses Contigo 💕</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #1a0025 0%, #3d0050 30%, #6b0070 60%, #3d0050 100%);
+    font-family: 'Lato', sans-serif;
+    overflow-x: hidden;
+    position: relative;
+  }
+  #hearts-canvas {
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none; z-index: 0;
+  }
+  .page-wrapper {
+    position: relative; z-index: 1;
+    display: flex; flex-direction: column; align-items: center;
+    padding: 40px 20px 80px; min-height: 100vh;
+  }
+  .title-section { text-align: center; margin-bottom: 30px; animation: fadeInDown 1.5s ease; }
+  .title-section .subtitle {
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(14px, 4vw, 20px);
+    color: #ffaad4; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 10px;
+  }
+  .title-section h1 {
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(36px, 10vw, 72px); color: #fff;
+    text-shadow: 0 0 30px rgba(255,100,180,0.8), 0 0 60px rgba(255,50,150,0.4); line-height: 1.1;
+  }
+  .counter-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,150,200,0.5);
+    border-radius: 50px; padding: 8px 28px; margin-top: 18px;
+    font-family: 'Dancing Script', cursive; font-size: clamp(16px, 4vw, 22px);
+    color: #ffccee; backdrop-filter: blur(10px); animation: pulse-glow 2.5s infinite;
+  }
+  @keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 10px rgba(255,100,180,0.3); }
+    50% { box-shadow: 0 0 25px rgba(255,100,180,0.8), 0 0 50px rgba(255,50,150,0.4); }
+  }
+  .card {
+    background: rgba(255,255,255,0.07); backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,150,200,0.25); border-radius: 24px;
+    padding: clamp(24px, 6vw, 50px); max-width: 680px; width: 100%;
+    margin-bottom: 24px; animation: fadeInUp 1.5s ease; position: relative; overflow: hidden;
+  }
+  .card::before {
+    content: ''; position: absolute; top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(ellipse at 60% 40%, rgba(255,100,200,0.06) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; }
+  .card-icon { font-size: 28px; animation: heartbeat 1.5s infinite; }
+  @keyframes heartbeat {
+    0%, 100% { transform: scale(1); } 14% { transform: scale(1.2); }
+    28% { transform: scale(1); } 42% { transform: scale(1.1); }
+  }
+  .card-title { font-family: 'Dancing Script', cursive; font-size: clamp(20px, 5vw, 30px); color: #ffaad4; }
+  .letter-text { font-size: clamp(14px, 3.5vw, 17px); color: rgba(255,255,255,0.88); line-height: 1.9; font-weight: 300; }
+  .letter-text p { margin-bottom: 16px; }
+  .letter-text p:last-child { margin-bottom: 0; }
+  .letter-signature { text-align: right; font-family: 'Dancing Script', cursive; font-size: clamp(20px, 5vw, 28px); color: #ffaad4; margin-top: 24px; }
+  .poem-card { background: rgba(180, 0, 100, 0.15); border-color: rgba(255,100,180,0.4); }
+  .poem-text { font-family: 'Dancing Script', cursive; font-size: clamp(16px, 4vw, 22px); color: #ffe0f0; text-align: center; line-height: 2.2; }
+  .poem-text .stanza { margin-bottom: 28px; }
+  .poem-text .stanza:last-child { margin-bottom: 0; }
+  .divider { text-align: center; font-size: 22px; margin: 8px 0 24px; opacity: 0.6; color: #ffaad4; letter-spacing: 8px; }
+  .memories-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-top: 4px; }
+  .memory-item {
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,150,200,0.2);
+    border-radius: 14px; padding: 16px 14px; text-align: center;
+    transition: transform 0.3s, background 0.3s;
+  }
+  .memory-item:hover { transform: translateY(-4px) scale(1.02); background: rgba(255,100,180,0.15); }
+  .memory-item .mem-icon { font-size: 28px; margin-bottom: 8px; display: block; }
+  .memory-item .mem-label { font-size: clamp(12px, 3vw, 14px); color: rgba(255,255,255,0.8); font-weight: 300; }
+  .footer-hearts { text-align: center; font-size: clamp(24px, 6vw, 36px); margin-top: 10px; animation: float 3s ease-in-out infinite; letter-spacing: 8px; }
+  @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+  @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+<canvas id="hearts-canvas"></canvas>
+<div class="page-wrapper">
+
+  <div class="title-section">
+    <div class="subtitle">✨ Para mi amor ✨</div>
+    <h1>3 Meses<br>Contigo</h1>
+    <div class="counter-badge">💕 3 meses, innumerables razones para amarte 💕</div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <span class="card-icon">💌</span>
+      <div class="card-title">Carta para el amor de mi vida</div>
+    </div>
+    <div class="letter-text">
+      <p>Amorcito de mi vida,</p>
+      <p>Hay momentos en la vida que uno no espera y que de repente lo cambian todo. Tú fuiste uno de esos momentos, desde el primer día en que entraste en mi vida, algo dentro de mí supo que eras especial, que eras diferente, que eras tú.</p>
+      <p>Han pasado tres meses desde que nos convertimos en novios y cada día ha sido un regalo, tres meses de risas que no puedo contener cuando estás cerca, de miradas que dicen más que mil palabras, de mensajes que espero con el corazón acelerado, de momentos que guardo como tesoros en el lugar más especial de mi memoria.</p>
+      <p>Quiero que sepas que me haces feliz de una manera que no sabía que existía. Tu sonrisa me ilumina cualquier día nublado. Tu voz es mi canción favorita y tu presencia... tu presencia, mi amosh es simplemente mi lugar favorito en el mundo entero.</p>
+      <p>Hoy en este pequeño rincón que creé solo para ti, quiero decirte gracias, gracias por tu amor, por tu paciencia, por tu ternura, por elegirme cada día. Gracias por ser exactamente quien eres.</p>
+      <p>Te amo, hoy, mañana y siempre.</p>
+    </div>
+    <div class="letter-signature">Con todo mi corazón 💗</div>
+  </div>
+
+  <div class="card poem-card">
+    <div class="card-header">
+      <span class="card-icon">🌹</span>
+      <div class="card-title">Un poema para ti</div>
+    </div>
+    <div class="divider">~ ~ ~</div>
+    <div class="poem-text">
+      <div class="stanza">
+        Desde que llegaste a mi vida,<br>
+        el mundo cambió de color,<br>
+        cada mañana amanecida<br>
+        huele a ti, sabe a tu amor.
+      </div>
+      <div class="stanza">
+        Tres meses de pequeños cielos,<br>
+        de miradas que dicen todo,<br>
+        en tus ojos encontré el vuelo<br>
+        y en tu risa, el mejor modo.
+      </div>
+      <div class="stanza">
+        Eres el verso que faltaba,<br>
+        la palabra que no hallé,<br>
+        la canción que me esperaba<br>
+        desde antes de conocerte a ti.
+      </div>
+      <div class="stanza">
+        Y aunque el tiempo siga andando<br>
+        y los días sigan corriendo,<br>
+        yo aquí estaré, amándote<br>
+        más cada día que voy viviendo.
+      </div>
+    </div>
+    <div class="divider">~ ~ ~</div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <span class="card-icon">⭐</span>
+      <div class="card-title">Lo que más amo de nosotros</div>
+    </div>
+    <div class="memories-grid">
+      <div class="memory-item"><span class="mem-icon">😂</span><div class="mem-label">Nuestras risas que no paran</div></div>
+      <div class="memory-item"><span class="mem-icon">🌙</span><div class="mem-label">Noches hablando hasta tarde</div></div>
+      <div class="memory-item"><span class="mem-icon">🤝</span><div class="mem-label">Tomar tu mano y sentirme en casa</div></div>
+      <div class="memory-item"><span class="mem-icon">💬</span><div class="mem-label">Cada mensaje tuyo que alegra mi día</div></div>
+      <div class="memory-item"><span class="mem-icon">🌟</span><div class="mem-label">Soñar juntos el futuro</div></div>
+      <div class="memory-item"><span class="mem-icon">💑</span><div class="mem-label">Simplemente estar juntos</div></div>
+    </div>
+  </div>
+
+  <div class="footer-hearts">💖 💗 💕 💓 💞</div>
+</div>
+
+<script>
+const canvas = document.getElementById('hearts-canvas');
+const ctx = canvas.getContext('2d');
+function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+resize();
+window.addEventListener('resize', resize);
+const HEARTS = [];
+const COLORS = ['#ff4da6','#ff80c0','#ffaadd','#ff1a7f','#ff66b2','#e6005c','#ff99cc','#cc0066'];
+const HEART_CHARS = ['♥','❤','💕','💗','💓','💖','💘','💝'];
+function randomHeart() {
+  return {
+    x: Math.random() * window.innerWidth, y: window.innerHeight + 30,
+    size: 10 + Math.random() * 22, speedY: 0.6 + Math.random() * 1.4,
+    speedX: (Math.random() - 0.5) * 0.8, opacity: 0.4 + Math.random() * 0.6,
+    color: COLORS[Math.floor(Math.random() * COLORS.length)],
+    char: HEART_CHARS[Math.floor(Math.random() * HEART_CHARS.length)],
+    wobble: Math.random() * Math.PI * 2, wobbleSpeed: 0.02 + Math.random() * 0.03
+  };
+}
+for (let i = 0; i < 50; i++) { const h = randomHeart(); h.y = Math.random() * window.innerHeight; HEARTS.push(h); }
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  HEARTS.forEach((h, i) => {
+    h.y -= h.speedY; h.wobble += h.wobbleSpeed; h.x += Math.sin(h.wobble) * 0.5 + h.speedX;
+    ctx.save(); ctx.globalAlpha = h.opacity; ctx.fillStyle = h.color;
+    ctx.font = h.size + 'px serif'; ctx.textAlign = 'center';
+    ctx.fillText(h.char, h.x, h.y); ctx.restore();
+    if (h.y < -30) HEARTS[i] = randomHeart();
+  });
+  requestAnimationFrame(animate);
+}
+animate();
+</script>
+</body>
+</html>
